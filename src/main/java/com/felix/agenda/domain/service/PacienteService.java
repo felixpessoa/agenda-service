@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.felix.agenda.domain.model.Paciente;
 import com.felix.agenda.domain.repository.PacienteRepository;
+import com.felix.agenda.exception.BusinessException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +33,7 @@ public class PacienteService {
 		}
 		
 		if(existeCpf) {
-			return exception;
+			throw new BusinessException("CPF já cadastrado!");
 		}
 		
 		return pacienteRepository.save(paciente);
