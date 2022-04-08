@@ -47,7 +47,7 @@ public class PacienteService {
 		return pacienteRepository.findById(pacienteId);
 	}
 	
-	public void deletet(Long pacienteId) {
+	public void delete(Long pacienteId) {
 		pacienteRepository.deleteById(pacienteId);
 	}
 	
