@@ -4,17 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.felix.agenda.domain.model.Paciente;
 import com.felix.agenda.domain.repository.PacienteRepository;
 import com.felix.agenda.exception.BusinessException;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Service
-@Transactional
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PacienteService {
 	
 	private PacienteRepository pacienteRepository;
@@ -23,17 +21,29 @@ public class PacienteService {
 	public Paciente createPaciente(Paciente paciente) {
 		
 		boolean existeCpf = false;
+		boolean existeEmail = false;
+		String existeCpfTrue = "";
+		String existeEmailTrue = "";
 		
-		Optional<Paciente> optPaciente = pacienteRepository.findByCpf(paciente.getCpf());
+		Optional<Paciente> optPacienteCPF = pacienteRepository.findByCpf(paciente.getCpf());
+		Optional<Paciente> optPacienteEmail = pacienteRepository.findByEmail(paciente.getEmail());
 		
-		if(optPaciente.isPresent()) {
-			if(!optPaciente.get().getPacienteID().equals(paciente.getPacienteID())) {
+		if(optPacienteCPF.isPresent() || optPacienteEmail.isPresent()) {
+			if((!optPacienteCPF.get().getPacienteID().equals(paciente.getPacienteID())) 
+					|| (!optPacienteEmail.get().getPacienteID().equals(paciente.getPacienteID()))) {
 				existeCpf = true;
 			}
 		}
 		
 		if(existeCpf) {
-			throw new BusinessException("CPF já cadastrado!");
+			existeCpfTrue = "CPF já cadastrado";
+		}
+		if(existeEmail) {
+			existeEmailTrue = "Email já cadastrado";
+		}
+		
+		if(existeCpf || existeEmail) {
+			throw new BusinessException(existeCpfTrue + " " + existeEmailTrue);
 		}
 		
 		return pacienteRepository.save(paciente);
