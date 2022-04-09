@@ -20,33 +20,51 @@ public class PacienteService {
 	
 	public Paciente createPaciente(Paciente paciente) {
 		
-		boolean existeCpf = false;
-		boolean existeEmail = false;
 		String existeCpfTrue = "";
 		String existeEmailTrue = "";
 		
-		Optional<Paciente> optPacienteCPF = pacienteRepository.findByCpf(paciente.getCpf());
-		Optional<Paciente> optPacienteEmail = pacienteRepository.findByEmail(paciente.getEmail());
-		
-		if(optPacienteCPF.isPresent() || optPacienteEmail.isPresent()) {
-			if((!optPacienteCPF.get().getPacienteID().equals(paciente.getPacienteID())) 
-					|| (!optPacienteEmail.get().getPacienteID().equals(paciente.getPacienteID()))) {
-				existeCpf = true;
-			}
-		}
-		
-		if(existeCpf) {
+		if(findByCpf(paciente)) {
 			existeCpfTrue = "CPF já cadastrado";
 		}
-		if(existeEmail) {
+		
+		if(findByEmail(paciente)) {
 			existeEmailTrue = "Email já cadastrado";
 		}
 		
-		if(existeCpf || existeEmail) {
+		if(findByCpf(paciente) || findByEmail(paciente)) {
 			throw new BusinessException(existeCpfTrue + " " + existeEmailTrue);
 		}
 		
 		return pacienteRepository.save(paciente);
+	}
+	
+	public Paciente upDate(Paciente paciente) {
+		
+		Paciente oldPaciente = new Paciente();
+		
+		String existeCpfTrue = "";
+		String existeEmailTrue = "";
+		
+		if(findByCpf(paciente)) {
+			existeCpfTrue = "CPF já cadastrado";
+		}
+		
+		if(findByEmail(paciente)) {
+			existeEmailTrue = "Email já cadastrado";
+		}
+		
+		if(findByCpf(paciente) || findByEmail(paciente)) {
+			throw new BusinessException(existeCpfTrue + " " + existeEmailTrue);
+		}
+		
+		oldPaciente.setNome(paciente.getNome());
+		oldPaciente.setSobrenome(paciente.getSobrenome());
+		oldPaciente.setCpf(paciente.getCpf());
+		oldPaciente.setEmail(paciente.getEmail());
+		
+		return pacienteRepository.save(oldPaciente);
+		
+		
 	}
 	
 	public List<Paciente> findAllPaciente(){
@@ -61,6 +79,27 @@ public class PacienteService {
 		pacienteRepository.deleteById(pacienteId);
 	}
 	
+	private boolean findByCpf(Paciente paciente) {
+		
+		boolean existeCpf = false;
+		Optional<Paciente> optPacienteCPF = pacienteRepository.findByCpf(paciente.getCpf());
+		if(optPacienteCPF.isPresent()){
+			if(!optPacienteCPF.get().getPacienteID().equals(paciente.getPacienteID())){
+				existeCpf = true;
+			}
+		}
+		return existeCpf;
+	}
 	
+	private boolean findByEmail(Paciente paciente) {
+		boolean existeEmail = false;
+		Optional<Paciente> optPacietneEmail = pacienteRepository.findByEmail(paciente.getEmail());
+		if(optPacietneEmail.isPresent()) {
+			if(!optPacietneEmail.get().getPacienteID().equals(paciente.getPacienteID())) {
+				existeEmail = true;
+			}
+		}
+		return existeEmail;
+	}
 	
 }

@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PacienteController {
 	
-	private final PacienteService pacienteService;
+	private PacienteService pacienteService;
 	
 	@PostMapping
 	public ResponseEntity<Paciente> create(@RequestBody Paciente paciente){
@@ -40,7 +40,7 @@ public class PacienteController {
 		 return ResponseEntity.status(HttpStatus.OK).body(pacientes);
 	 }
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{pacienteId}")
 	public ResponseEntity<Paciente> findByIdPaciente(@PathVariable Long pacienteId){
 		Optional<Paciente> optPaciente = pacienteService.findByIdPaciente(pacienteId);
 		 
@@ -55,11 +55,11 @@ public class PacienteController {
 	
 	@PutMapping
 	public ResponseEntity<Paciente> findByIdPaciente(@RequestBody Paciente paciente){
-		Paciente pacientecreate = pacienteService.createPaciente(paciente);
+		Paciente pacientecreate = pacienteService.upDate(paciente);
 		return ResponseEntity.status(HttpStatus.OK).body(pacientecreate);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{pacienteId}")
 	public ResponseEntity<Void> delete(@PathVariable Long pacienteId){
 		pacienteService.delete(pacienteId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
