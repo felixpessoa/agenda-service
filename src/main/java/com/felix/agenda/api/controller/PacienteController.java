@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.felix.agenda.api.mapper.PacienteMapper;
+import com.felix.agenda.api.request.PacienteRequest;
+import com.felix.agenda.api.response.PacienteResponse;
 import com.felix.agenda.domain.model.Paciente;
 import com.felix.agenda.domain.service.PacienteService;
 
@@ -29,9 +32,11 @@ public class PacienteController {
 	private final PacienteService pacienteService;
 	
 	@PostMapping
-	public ResponseEntity<Paciente> create(@RequestBody Paciente paciente){
+	public ResponseEntity<PacienteResponse> create(@RequestBody PacienteRequest pacienteRequest){
+		Paciente paciente = PacienteMapper.toPaciente(pacienteRequest);
 		Paciente newPaciente = pacienteService.createPaciente(paciente);
-		return ResponseEntity.status(HttpStatus.CREATED).body(newPaciente);
+		PacienteResponse pacienteResponse = PacienteMapper.toPacienteResponse(newPaciente);
+		return ResponseEntity.status(HttpStatus.CREATED).body(pacienteResponse);
 	}
 	
 	@GetMapping
@@ -40,7 +45,7 @@ public class PacienteController {
 		 return ResponseEntity.status(HttpStatus.OK).body(pacientes);
 	 }
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{pacienteId}")
 	public ResponseEntity<Paciente> findByIdPaciente(@PathVariable Long pacienteId){
 		Optional<Paciente> optPaciente = pacienteService.findByIdPaciente(pacienteId);
 		 
@@ -59,7 +64,7 @@ public class PacienteController {
 		return ResponseEntity.status(HttpStatus.OK).body(pacientecreate);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{pacienteId}")
 	public ResponseEntity<Void> delete(@PathVariable Long pacienteId){
 		pacienteService.delete(pacienteId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

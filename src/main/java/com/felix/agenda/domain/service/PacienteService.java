@@ -14,53 +14,38 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class PacienteService {
-	
+
 	private PacienteRepository pacienteRepository;
-	
-	
+
 	public Paciente createPaciente(Paciente paciente) {
-		
+
 		boolean existeCpf = false;
-		boolean existeEmail = false;
-		String existeCpfTrue = "";
-		String existeEmailTrue = "";
-		
+
 		Optional<Paciente> optPacienteCPF = pacienteRepository.findByCpf(paciente.getCpf());
-		Optional<Paciente> optPacienteEmail = pacienteRepository.findByEmail(paciente.getEmail());
-		
-		if(optPacienteCPF.isPresent() || optPacienteEmail.isPresent()) {
-			if((!optPacienteCPF.get().getPacienteID().equals(paciente.getPacienteID())) 
-					|| (!optPacienteEmail.get().getPacienteID().equals(paciente.getPacienteID()))) {
+
+		if (optPacienteCPF.isPresent()) {
+			if (!optPacienteCPF.get().getPacienteId().equals(paciente.getPacienteId())) {
 				existeCpf = true;
 			}
 		}
-		
-		if(existeCpf) {
-			existeCpfTrue = "CPF já cadastrado";
+
+		if (existeCpf) {
+			throw new BusinessException("CPF já cadastrado");
 		}
-		if(existeEmail) {
-			existeEmailTrue = "Email já cadastrado";
-		}
-		
-		if(existeCpf || existeEmail) {
-			throw new BusinessException(existeCpfTrue + " " + existeEmailTrue);
-		}
-		
+
 		return pacienteRepository.save(paciente);
 	}
-	
-	public List<Paciente> findAllPaciente(){
+
+	public List<Paciente> findAllPaciente() {
 		return pacienteRepository.findAll();
 	}
-	
+
 	public Optional<Paciente> findByIdPaciente(Long pacienteId) {
 		return pacienteRepository.findById(pacienteId);
 	}
-	
+
 	public void delete(Long pacienteId) {
 		pacienteRepository.deleteById(pacienteId);
 	}
-	
-	
-	
+
 }
