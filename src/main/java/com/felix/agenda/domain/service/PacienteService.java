@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.felix.agenda.domain.model.Paciente;
 import com.felix.agenda.domain.repository.PacienteRepository;
@@ -17,20 +18,23 @@ public class PacienteService {
 
 	private PacienteRepository pacienteRepository;
 
+	
 	public Paciente createPaciente(Paciente paciente) {
 		
 		String existeCpfTrue = "";
 		String existeEmailTrue = "";
+		boolean findCpf = findByCpf(paciente);
+		boolean findEmail = findByEmail(paciente);
 		
-		if(findByCpf(paciente)) {
+		if(findCpf) {
 			existeCpfTrue = "CPF já cadastrado";
 		}
 
-		if(findByEmail(paciente)) {
+		if(findEmail) {
 			existeEmailTrue = "Email já cadastrado";
 		}
 		
-		if(findByCpf(paciente) || findByEmail(paciente)) {
+		if(findCpf || findEmail) {
 			throw new BusinessException(" "+existeCpfTrue + " " + existeEmailTrue+" ");
 		}
 		
@@ -39,33 +43,13 @@ public class PacienteService {
 	}
 
 	
-	public Paciente upDate(Paciente paciente) {
-		
-		Paciente oldPaciente = new Paciente();
-		
-		String existeCpfTrue = "";
-		String existeEmailTrue = "";
-		
-		if(findByCpf(paciente)) {
-			existeCpfTrue = "CPF já cadastrado";
+	public Paciente atualizarPaciente(Long pacienteId, Paciente paciente) {
+		Optional<Paciente> optPaciente = this.findByIdPaciente(pacienteId);
+		if (optPaciente.isEmpty()) {
+			throw new BusinessException("Paciente não cadastrado!");
 		}
-		
-		if(findByEmail(paciente)) {
-			existeEmailTrue = "Email já cadastrado";
-		}
-		
-		if(findByCpf(paciente) || findByEmail(paciente)) {
-			throw new BusinessException(existeCpfTrue + " " + existeEmailTrue);
-		}
-		
-		oldPaciente.setNome(paciente.getNome());
-		oldPaciente.setSobrenome(paciente.getSobrenome());
-		oldPaciente.setCpf(paciente.getCpf());
-		oldPaciente.setEmail(paciente.getEmail());
-		
-		return pacienteRepository.save(oldPaciente);
-		
-		
+		paciente.setPacienteId(pacienteId); 
+		return createPaciente(paciente);
 	}
 	
 
@@ -82,7 +66,6 @@ public class PacienteService {
 	}
 	
 	private boolean findByCpf(Paciente paciente) {
-		
 		boolean existeCpf = false;
 		Optional<Paciente> optPacienteCPF = pacienteRepository.findByCpf(paciente.getCpf());
 		if(optPacienteCPF.isPresent()){
@@ -103,6 +86,4 @@ public class PacienteService {
 		}
 		return existeEmail;
 	}
-	
-
 }

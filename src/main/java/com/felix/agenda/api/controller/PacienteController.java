@@ -3,8 +3,11 @@ package com.felix.agenda.api.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,38 +33,41 @@ import lombok.AllArgsConstructor;
 public class PacienteController {
 	
 	private PacienteService pacienteService;
+	private PacienteMapper pacienteMapper;
 	
 	@PostMapping
-	public ResponseEntity<PacienteResponse> create(@RequestBody PacienteRequest pacienteRequest){
-		Paciente paciente = PacienteMapper.toPaciente(pacienteRequest);
+	public ResponseEntity<PacienteResponse> create(@Valid @RequestBody PacienteRequest pacienteRequest){
+		Paciente paciente = pacienteMapper.toPaciente(pacienteRequest);
 		Paciente newPaciente = pacienteService.createPaciente(paciente);
-		PacienteResponse pacienteResponse = PacienteMapper.toPacienteResponse(newPaciente);
+		PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(newPaciente);
 		return ResponseEntity.status(HttpStatus.CREATED).body(pacienteResponse);
 	}
 	
 	@GetMapping
-	 public ResponseEntity<List<Paciente>> findAllPaciente(){
+	 public ResponseEntity<List<PacienteResponse>> findAllPaciente(){
 		 List<Paciente> pacientes = pacienteService.findAllPaciente();
-		 return ResponseEntity.status(HttpStatus.OK).body(pacientes);
+		 List<PacienteResponse> pacienteResponses = pacienteMapper.toPacienteResponseList(pacientes);
+		 return ResponseEntity.status(HttpStatus.OK).body(pacienteResponses);
 	 }
 	
 	@GetMapping("/{pacienteId}")
-	public ResponseEntity<Paciente> findByIdPaciente(@PathVariable Long pacienteId){
+	public ResponseEntity<PacienteResponse> findByIdPaciente(@PathVariable Long pacienteId){
 		Optional<Paciente> optPaciente = pacienteService.findByIdPaciente(pacienteId);
 		 
 		if (optPaciente.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		Paciente paciente = optPaciente.get();
-		
-		return ResponseEntity.status(HttpStatus.OK).body(paciente);
+		return ResponseEntity.status(HttpStatus.OK).body(pacienteMapper.toPacienteResponse(optPaciente.get()));
 	}
+
 	
-	@PutMapping
-	public ResponseEntity<Paciente> findByIdPaciente(@RequestBody Paciente paciente){
-		Paciente pacientecreate = pacienteService.upDate(paciente);
-		return ResponseEntity.status(HttpStatus.OK).body(pacientecreate);
+	@PutMapping("/{pacienteId}")
+	public ResponseEntity<PacienteResponse> findByIdPaciente(@Valid @PathVariable Long pacienteId, @RequestBody PacienteRequest pacienteRequest){
+		Paciente paciente = pacienteMapper.toPaciente(pacienteRequest);
+		Paciente pacienteCreate = pacienteService.atualizarPaciente(pacienteId, paciente);
+		PacienteResponse pacienteResponse = pacienteMapper.toPacienteResponse(pacienteCreate);
+		return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
 	}
 	
 	@DeleteMapping("/{pacienteId}")
