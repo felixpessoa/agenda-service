@@ -1,5 +1,6 @@
 package com.felix.agenda.domain.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +39,9 @@ public class PacienteService {
 			throw new BusinessException(" "+existeCpfTrue + " " + existeEmailTrue+" ");
 		}
 		
+		if(paciente.getPacienteId()== null) {
+		paciente.setDataCriacao(LocalDateTime.now());
+		}
 		return pacienteRepository.save(paciente);
 		
 	}
@@ -48,7 +52,8 @@ public class PacienteService {
 		if (optPaciente.isEmpty()) {
 			throw new BusinessException("Paciente não cadastrado!");
 		}
-		paciente.setPacienteId(pacienteId); 
+		paciente.setPacienteId(pacienteId);
+		paciente.setDataCriacao(optPaciente.get().getDataCriacao());
 		return createPaciente(paciente);
 	}
 	

@@ -31,7 +31,7 @@ public class Agenda implements Serializable{
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private LocalDateTime horario;
 	
-	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+	@JsonFormat(pattern = "HH:mm dd/MM/yyyy")
 	private LocalDateTime dataCriacaoAgenda;
 	
 	@ManyToOne
@@ -39,7 +39,7 @@ public class Agenda implements Serializable{
 
 	public Agenda() {
 		super();
-		this.setDataCriacaoAgenda(LocalDateTime.now());
+		// TODO Auto-generated constructor stub
 	}
 
 	public Agenda(Long agendaId, String descricao, LocalDateTime horario, LocalDateTime dataCriacaoAgenda,
@@ -48,7 +48,7 @@ public class Agenda implements Serializable{
 		this.agendaId = agendaId;
 		this.descricao = descricao;
 		this.horario = horario;
-		this.setDataCriacaoAgenda(LocalDateTime.now());
+		this.dataCriacaoAgenda = dataCriacaoAgenda;
 		this.paciente = paciente;
 	}
 
@@ -116,9 +116,7 @@ public class Agenda implements Serializable{
 		return "Agenda [agendaId=" + agendaId + ", descricao=" + descricao + ", horario=" + horario
 				+ ", dataCriacaoAgenda=" + dataCriacaoAgenda + ", paciente=" + paciente + "]";
 	}
-	
-	
-	
+
 	
 
 }

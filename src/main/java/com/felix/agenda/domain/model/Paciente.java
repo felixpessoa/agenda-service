@@ -42,7 +42,7 @@ public class Paciente implements Serializable{
 
 	public Paciente() {
 		super();
-		this.setDataCriacao(LocalDateTime.now());
+		// TODO Auto-generated constructor stub
 	}
 
 	public Paciente(Long pacienteId, String nome, String sobrenome, @Email String email, @CPF String cpf,
@@ -53,15 +53,15 @@ public class Paciente implements Serializable{
 		this.sobrenome = sobrenome;
 		this.email = email;
 		this.cpf = cpf;
-		this.setDataCriacao(LocalDateTime.now());
+		this.dataCriacao = dataCriacao;
 	}
 
 	public Long getPacienteId() {
 		return pacienteId;
 	}
 
-	public void setPacienteId(Long pacienteID) {
-		this.pacienteId = pacienteID;
+	public void setPacienteId(Long pacienteId) {
+		this.pacienteId = pacienteId;
 	}
 
 	public String getNome() {
@@ -106,7 +106,7 @@ public class Paciente implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cpf, email, pacienteId);
+		return Objects.hash(cpf, dataCriacao, email, nome, pacienteId, sobrenome);
 	}
 
 	@Override
@@ -118,16 +118,17 @@ public class Paciente implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Paciente other = (Paciente) obj;
-		return Objects.equals(cpf, other.cpf) && Objects.equals(email, other.email)
-				&& Objects.equals(pacienteId, other.pacienteId);
+		return Objects.equals(cpf, other.cpf) && Objects.equals(dataCriacao, other.dataCriacao)
+				&& Objects.equals(email, other.email) && Objects.equals(nome, other.nome)
+				&& Objects.equals(pacienteId, other.pacienteId) && Objects.equals(sobrenome, other.sobrenome);
 	}
 
 	@Override
 	public String toString() {
-		return "Paciente [pacienteID=" + pacienteId + ", nome=" + nome + ", sobrenome=" + sobrenome + ", email=" + email
+		return "Paciente [pacienteId=" + pacienteId + ", nome=" + nome + ", sobrenome=" + sobrenome + ", email=" + email
 				+ ", cpf=" + cpf + ", dataCriacao=" + dataCriacao + "]";
 	}
-	
+
 	
 	
 
