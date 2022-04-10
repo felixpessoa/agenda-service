@@ -26,7 +26,7 @@ public class Paciente implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long pacienteID;
+	private Long pacienteId;
 	
 	private String nome;
 	private String sobrenome;
@@ -45,10 +45,10 @@ public class Paciente implements Serializable{
 		this.setDataCriacao(LocalDateTime.now());
 	}
 
-	public Paciente(Long pacienteID, String nome, String sobrenome, @Email String email, @CPF String cpf,
+	public Paciente(Long pacienteId, String nome, String sobrenome, @Email String email, @CPF String cpf,
 			LocalDateTime dataCriacao) {
 		super();
-		this.pacienteID = pacienteID;
+		this.pacienteId = pacienteId;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.email = email;
@@ -56,12 +56,12 @@ public class Paciente implements Serializable{
 		this.setDataCriacao(LocalDateTime.now());
 	}
 
-	public Long getPacienteID() {
-		return pacienteID;
+	public Long getPacienteId() {
+		return pacienteId;
 	}
 
-	public void setPacienteID(Long pacienteID) {
-		this.pacienteID = pacienteID;
+	public void setPacienteId(Long pacienteID) {
+		this.pacienteId = pacienteID;
 	}
 
 	public String getNome() {
@@ -106,7 +106,7 @@ public class Paciente implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cpf, email, pacienteID);
+		return Objects.hash(cpf, email, pacienteId);
 	}
 
 	@Override
@@ -119,12 +119,12 @@ public class Paciente implements Serializable{
 			return false;
 		Paciente other = (Paciente) obj;
 		return Objects.equals(cpf, other.cpf) && Objects.equals(email, other.email)
-				&& Objects.equals(pacienteID, other.pacienteID);
+				&& Objects.equals(pacienteId, other.pacienteId);
 	}
 
 	@Override
 	public String toString() {
-		return "Paciente [pacienteID=" + pacienteID + ", nome=" + nome + ", sobrenome=" + sobrenome + ", email=" + email
+		return "Paciente [pacienteID=" + pacienteId + ", nome=" + nome + ", sobrenome=" + sobrenome + ", email=" + email
 				+ ", cpf=" + cpf + ", dataCriacao=" + dataCriacao + "]";
 	}
 	

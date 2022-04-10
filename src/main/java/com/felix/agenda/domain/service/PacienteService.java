@@ -14,10 +14,9 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class PacienteService {
-	
+
 	private PacienteRepository pacienteRepository;
-	
-	
+
 	public Paciente createPaciente(Paciente paciente) {
 		
 		String existeCpfTrue = "";
@@ -26,17 +25,19 @@ public class PacienteService {
 		if(findByCpf(paciente)) {
 			existeCpfTrue = "CPF já cadastrado";
 		}
-		
+
 		if(findByEmail(paciente)) {
 			existeEmailTrue = "Email já cadastrado";
 		}
 		
 		if(findByCpf(paciente) || findByEmail(paciente)) {
-			throw new BusinessException(existeCpfTrue + " " + existeEmailTrue);
+			throw new BusinessException(" "+existeCpfTrue + " " + existeEmailTrue+" ");
 		}
 		
 		return pacienteRepository.save(paciente);
+		
 	}
+
 	
 	public Paciente upDate(Paciente paciente) {
 		
@@ -67,14 +68,15 @@ public class PacienteService {
 		
 	}
 	
-	public List<Paciente> findAllPaciente(){
+
+	public List<Paciente> findAllPaciente() {
 		return pacienteRepository.findAll();
 	}
-	
+
 	public Optional<Paciente> findByIdPaciente(Long pacienteId) {
 		return pacienteRepository.findById(pacienteId);
 	}
-	
+
 	public void delete(Long pacienteId) {
 		pacienteRepository.deleteById(pacienteId);
 	}
@@ -84,7 +86,7 @@ public class PacienteService {
 		boolean existeCpf = false;
 		Optional<Paciente> optPacienteCPF = pacienteRepository.findByCpf(paciente.getCpf());
 		if(optPacienteCPF.isPresent()){
-			if(!optPacienteCPF.get().getPacienteID().equals(paciente.getPacienteID())){
+			if(!optPacienteCPF.get().getPacienteId().equals(paciente.getPacienteId())){
 				existeCpf = true;
 			}
 		}
@@ -95,11 +97,12 @@ public class PacienteService {
 		boolean existeEmail = false;
 		Optional<Paciente> optPacietneEmail = pacienteRepository.findByEmail(paciente.getEmail());
 		if(optPacietneEmail.isPresent()) {
-			if(!optPacietneEmail.get().getPacienteID().equals(paciente.getPacienteID())) {
+			if(!optPacietneEmail.get().getPacienteId().equals(paciente.getPacienteId())) {
 				existeEmail = true;
 			}
 		}
 		return existeEmail;
 	}
 	
+
 }
