@@ -29,8 +29,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AgendaController {
 
-	private AgendaService agendaService;
-	private AgendaMapper agendaMapper;
+	private final AgendaService agendaService;
+	private final AgendaMapper agendaMapper;
 
 	@GetMapping
 	public ResponseEntity<List<AgendaResponse>> findAllAgenda() {
