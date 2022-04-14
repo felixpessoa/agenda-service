@@ -1,42 +1,25 @@
 package com.felix.agenda.domain.model;
 
-import java.io.Serializable;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@Data
-@Table(name = "usuarios")
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-public class Usuario implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+@Data
+@RequiredArgsConstructor
+@Table(name = "usuarios")
+public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long usuarioId;
-	
-	@NotBlank
-	private String nome;
-	
-	@NotBlank
-	private String usuario;
-	
-	@NotBlank
+	@Column(unique = true)
+	private String login;
 	private String senha;
-
-	
+	private String nome;
 }
