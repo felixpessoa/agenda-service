@@ -24,7 +24,7 @@ public class DateUserData implements UserDetails{
 
 	@Override
 	public String getPassword() {
-		return usuario.orElse(new Usuario()).getSenha();
+		return usuario.orElse(new Usuario()).getPassword();
 	}
 
 	@Override

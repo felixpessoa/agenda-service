@@ -20,6 +20,6 @@ public class Usuario {
 	private Long usuarioId;
 	@Column(unique = true)
 	private String login;
-	private String senha;
+	private String password;
 	private String nome;
 }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.auth0.jwt.JWT;
@@ -41,8 +42,10 @@ public class JWTValidateFilter extends BasicAuthenticationFilter{
 			return;
 		}
 		
-//		UsernamePasswordAuthenticationToken authenticationToken = 
-		
+		String token = atributo.replace(ATRIBUTO_PREFIXO, "");
+		UsernamePasswordAuthenticationToken authenticationToken = getAuthenticationToken(token);
+		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+		chain.doFilter(request, response);
 	}
 	
 	private UsernamePasswordAuthenticationToken getAuthenticationToken(String token) {

@@ -35,7 +35,7 @@ public class UsuarioController {
 	
 	@PostMapping
 	public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario){
-		usuario.setSenha(encoder.encode(usuario.getSenha()));
+		usuario.setPassword(encoder.encode(usuario.getPassword()));
 		return ResponseEntity.ok(usuarioRepository.save(usuario));
 	}
 	
@@ -48,7 +48,7 @@ public class UsuarioController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
 		}
 		
-		boolean valid  = encoder.matches(senha, optUsuario.get().getSenha());
+		boolean valid  = encoder.matches(senha, optUsuario.get().getPassword());
 		
 		HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
 		
